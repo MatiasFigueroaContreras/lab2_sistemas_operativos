@@ -27,4 +27,6 @@ char *toString(YearData *data);
 float meanPrices(YearData *data);
 
 float getPercentage(int total_games, int plataform_games);
+
+int isEmpty(YearData *data);
 #endif

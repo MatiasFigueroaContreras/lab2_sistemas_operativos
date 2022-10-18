@@ -114,3 +114,17 @@ float getPercentage(int total_games, int plataform_games)
 {
     return (plataform_games / (float)total_games) * 100;
 }
+
+/*
+    Descripcion: Consulta si la estructura esta vacia.
+
+    Parametros:
+        YearData: Estructura con los datos del año seleccionado
+    Retorno:
+        0: si la estructura NO esta vacia.
+        1: si la estructura esta vacia.
+*/
+int isEmpty(YearData *data)
+{
+    return data->total_games == 0;
+}
