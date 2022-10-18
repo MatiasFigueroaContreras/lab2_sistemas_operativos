@@ -9,7 +9,11 @@ char *getLine(FILE *input_file);
 
 int *stopWorkers(int **fds); // Retorna las lineas trabajadas por cada worker.
 
+<<<<<<< HEAD
 void writeOutputFile(char *output_file, YearData *years_data);
+=======
+void writeOutputFolder(YearData *years_data);
+>>>>>>> main
 
 void printYearsData(YearData *years_data);
 
