@@ -1,12 +1,14 @@
 #include "fbroker.h"
 
-// Entradas:
-// Salidas:
-// Descripcion:
-int ***createWorkers(int num_workers)
+/*
+    Entradas:
+    Salidas:
+    Descripcion:
+*/
+int ***createWorkers(int num_workers, float min_price, int initial_year)
 {
     int fds[num_workers][2][2], pid;
-    char *fd_read, *fd_write;
+    char *fd_read, *fd_write, *s_min_price, *s_initial_year;
     for (int i = 0; i < num_workers; i++)
     {
         pipe(fds[i][0]);
@@ -17,7 +19,9 @@ int ***createWorkers(int num_workers)
             close(fds[i][BROKER_READ][READING]);
             sprintf(fd_read, "%d", fds[i][0][READING]);
             sprintf(fd_write, "%d", fds[i][1][WRITING]);
-            execl("./worker", "./worker", fd_read, fd_write, NULL);
+            sprintf(s_min_price, "%d", min_price);
+            sprintf(s_initial_year, "%f", initial_year);
+            execl("./worker", "./worker", fd_read, fd_write, s_min_price, s_initial_year, NULL);
             perror("exec ls failed");
             exit(EXIT_FAILURE);
         }
@@ -35,19 +39,34 @@ int ***createWorkers(int num_workers)
     return fds;
 }
 
-// Entradas:FILE *input_file (archivo de entrada en modo lectura)
-// Salidas: char
-// Descripcion:Funcion encargada de obtener la cantidad de lineas procesadas por el worker
-char *getLine(FILE *input_file)
+/*
+    Entradas:
+        -int initial_year: anio inicial para comenzar buscar informacion. 
+    Salidas: arreglo con las estructuras YearData creadas.
+    Descripcion: Esta funcion se encarga de crear un arreglo de estructuras
+        YearData segun el anio inicial dado hasta el anio actual.
+*/
+YearData *createYearsDataArray(int initial_year)
 {
-    char game_data[400];
-    fgets(game_data, 400, input_file);
-    return game_data;
+    
+    int num_years = 2022 - initial_year + 1;
+    YearData years_data[num_years];
+    for(int i = 0; i < num_years; i++)
+    {
+        years_data[i] = *createYearData();
+    }
+
+    return years_data;
 }
 
-// Entradas:int **fds (file descriptor)
-// Salidas: int
-// Descripcion: Funcion encargada de mandar "FIN" a cada worker
+/*
+    Entradas:
+        -int ** fds: descriptores de archivos.
+        -int num_workers: numero de workers creados.
+    Salidas: cantidad de lineas trabajadas por los workers
+    Descripcion: Funcion encargada de mandar mensaje "FIN" a cada worker
+        y recibir la cantidad de lineas trabajadas por estos.
+*/
 int *stopWorkers(int ***fds, int num_workers)
 {
     const char *msg = "FIN";
@@ -60,11 +79,17 @@ int *stopWorkers(int ***fds, int num_workers)
         close(fds[i][BROKER_WRITE][WRITING]);
         close(fds[i][BROKER_READ][READING]);
     }
+
+    return line_numbers;
 }
 
-// Entradas:char *file_name(ARCHIVO DE SALIDA), YearData *years_data (ESTRUCTURA YEAR DATA)
-// Salidas:void
-// Descripcion: Funcion destinada a escribir en un archivo de salida
+/*
+    Entradas:
+        -char *file_name: nombre del archivo de salida.
+        -YearData *years_data: arreglo con los Years Data.
+    Salidas: void
+    Descripcion: Funcion destinada a escribir en un archivo de salida
+*/
 void writeOutputFile(char *file_name, YearData *years_data, int initial_year)
 {
     int index;
@@ -78,9 +103,11 @@ void writeOutputFile(char *file_name, YearData *years_data, int initial_year)
     }
 }
 
-// Entradas:YearData *years_data (ESTRUCTURA YEAR DATA)
-// Salidas: void
-// Descripcion: Imprime la estructura para la consola
+/*
+    Entradas:YearData *years_data (ESTRUCTURA YEAR DATA)
+    Salidas: void
+    Descripcion: Imprime la estructura para la consola
+*/
 void printYearsData(YearData *years_data, int initial_year)
 {
     for (int y = initial_year; y <= 2022; y++)
@@ -92,9 +119,11 @@ void printYearsData(YearData *years_data, int initial_year)
     }
 }
 
-// Entradas: int *line_numbers (NUMERO DE LINEAS DE CADA WORKER)
-// Salidas: void
-// Descripcion: Imprime la cantidad de lineas de cada worker para la consola en caso de que se active la flag -b
+/*
+    Entradas: int *line_numbers (NUMERO DE LINEAS DE CADA WORKER)
+    Salidas: void
+    Descripcion: Imprime la cantidad de lineas de cada worker para la consola en caso de que se active la flag -b
+*/
 void printLineNumbersWorkers(int *line_numbers)
 {
     for (int i = 0; i < line_numbers; i++)

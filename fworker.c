@@ -1,0 +1,137 @@
+#include "yearData.h"
+
+/*
+    Entradas:
+        -Int fd: descriptor de archivos
+    Salidas:
+        -Char: informacion del juego 
+    Descripcion: Funcion encargada de obtener las lineas de la informacion del juego
+
+*/
+
+char *getLine(int fd)
+{
+    char line[1000];
+    read(fd, line, sizeof(char) * 1000);
+    return line;
+}
+
+/*
+    Entradas:
+        -Int fd: Descriptor de archivos
+    Salidas:
+        -char: informacion de yearsData
+    Descripcion: Funcion encargada de obtener la informacion de YearData
+*/
+
+YearData *getYearsData(int fd)
+{
+    YearData *data;
+    read(fd, data, sizeof(YearData));
+    return data;
+}
+
+/*
+    Entradas:
+        -char *line: Cantidad de lineas  de la informacion del juego
+        -YearData *years_data: Arreglo de yearData
+        -float min_price: Precio minimo a considerar
+        -int initial_year: Anio a partir del cual se parte como base hasta el anio actual
+    Salidas:
+        -YearData: arreglo con YearData, actualizado
+    Descripcion: Funcion encargada de actualizar la informacion de YearData
+        dada un string (line) con informacion referente a un juego.
+*/
+YearData *updateYearData(char *line, YearData *years_data, float min_price, int initial_year)
+{
+    int index, year, in_windows = 0, in_mac = 0, in_linux = 0, is_free = 0, max_years = 2022 - initial_year + 1;
+    float price;
+    char game_name[100];
+    
+    int column = 0;
+    char *value = strtok(line, ",");
+    while (value)
+    {
+        switch (column)
+        {
+        case 1:
+            strcpy(game_name, value);
+            break;
+        case 3:
+            price = atof(value);
+            break;
+        case 5:
+            year = atoi(value);
+            break;
+        case 6:
+            if (strcmp("True", value) == 0)
+            {
+                is_free = 1;
+            }
+            break;
+        case 7:
+            if (strcmp("Yes", value) == 0)
+            {
+                in_windows = 1;
+            }
+            break;
+        case 8:
+            if (strcmp("Yes", value) == 0)
+            {
+                in_mac= 1;
+            }
+            break;
+        case 9:
+            if (value[0] == 'Y')
+            {
+                in_linux = 1;
+            }
+            break;
+        default:
+            break;
+        }
+
+        value = strtok(NULL, ",");
+        column++;
+    }
+
+    if (initial_year <= year && min_price <= price)
+    {
+        index = year % max_years;
+        years_data[index].total_games++;
+        years_data[index].sum_prices += price;
+        if(is_free)
+        {
+            strcpy(years_data[index].free_games[years_data[index].num_free_games], game_name);
+            years_data[index].num_free_games++;
+        }
+
+        if(in_windows)
+        {
+            years_data[index].windows_games++;
+        }
+
+        if (in_mac)
+        {
+            years_data[index].mac_games++;
+        }
+
+        if (in_linux)
+        {
+            years_data[index].linux_games++;
+        }
+
+        if (price > years_data[index].price_expensive_game)
+        {
+            years_data[index].price_expensive_game = price;
+            strcpy(years_data[index].expensive_game, game_name);
+        }
+        if (price < years_data[index].price_cheap_game)
+        {
+            years_data[index].price_cheap_game = price;
+            strcpy(years_data[index].cheap_game, game_name);
+        }
+    }
+
+    return years_data;
+}

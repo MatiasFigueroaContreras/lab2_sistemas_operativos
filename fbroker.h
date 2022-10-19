@@ -4,14 +4,14 @@
 #define BROKER_WRITE 0
 #define BROKER_READ 1
 
-int ***createWorkers(int num_workers); //Retorna los descriptores de archivos asociados a cada worker
+int ***createWorkers(int num_workers, float min_price, int initial_year); // Retorna los descriptores de archivos asociados a cada worker
 
-char *getLine(FILE *input_file);
+YearData *createYearsDataArray(int initial_year);
 
-int *stopWorkers(int ***fds); // Retorna las lineas trabajadas por cada worker.
+int *stopWorkers(int ***fds, int num_workers); // Retorna las lineas trabajadas por cada worker.
 
-void writeOutputFile(char *output_file, YearData *years_data, int num_years);
+void writeOutputFile(char *output_file, YearData *years_data, int initial_year);
 
-void printYearsData(YearData *years_data, int num_years);
+void printYearsData(YearData *years_data, int initial_year);
 
 void printLineNumbersWorkers(int *line_numbers);

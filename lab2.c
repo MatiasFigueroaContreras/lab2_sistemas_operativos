@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        wait(NULL);
+        wait(NULL); //?
         return 0;
     }
 }
