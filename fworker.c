@@ -2,37 +2,6 @@
 
 /*
     Entradas:
-        -Int fd: descriptor de archivos
-    Salidas:
-        -Char: informacion del juego 
-    Descripcion: Funcion encargada de obtener las lineas de la informacion del juego
-
-*/
-
-char *getLine(int fd)
-{
-    char line[1000];
-    read(fd, line, sizeof(char) * 1000);
-    return line;
-}
-
-/*
-    Entradas:
-        -Int fd: Descriptor de archivos
-    Salidas:
-        -char: informacion de yearsData
-    Descripcion: Funcion encargada de obtener la informacion de YearData
-*/
-
-YearData *getYearsData(int fd)
-{
-    YearData *data;
-    read(fd, data, sizeof(YearData));
-    return data;
-}
-
-/*
-    Entradas:
         -char *line: Cantidad de lineas  de la informacion del juego
         -YearData *years_data: Arreglo de yearData
         -float min_price: Precio minimo a considerar

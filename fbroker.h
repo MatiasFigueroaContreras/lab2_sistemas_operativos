@@ -1,4 +1,6 @@
 #include "yearData.h"
+#include <sys/types.h>
+#include <unistd.h>
 #define READING 0
 #define WRITING 1
 #define BROKER_WRITE 0
@@ -14,4 +16,4 @@ void writeOutputFile(char *output_file, YearData *years_data, int initial_year);
 
 void printYearsData(YearData *years_data, int initial_year);
 
-void printLineNumbersWorkers(int *line_numbers);
+void printLineNumbersWorkers(int *line_numbers, int num_workers);

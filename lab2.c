@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <string.h>
+#include <sys/wait.h>
 
 /*
     Descripcion: Imprime la informacion de uso referente al formato
@@ -19,7 +20,7 @@ void usage(FILE *fp, const char *path)
     const char *basename = path + 2;
     fprintf(fp, "usage: %s [OPTION]\n", basename);
     fprintf(fp, "The following is the correct format for using the program:\t\t"
-                "\n'./lab1 -i input_file -o output_file -d year -p min_price -n num_workers -b'\n");
+                "\n'./lab2 -i input_file -o output_file -d year -p min_price -n num_workers -b'\n");
     fprintf(fp, "  -h, --help\t\t"
                 "Print this help and exit.\n");
     fprintf(fp, "  -i, --input[=INPUTFILENAME]\t"
@@ -38,8 +39,7 @@ void usage(FILE *fp, const char *path)
 
 int main(int argc, char *argv[])
 {
-    char s_print_flag = "0", s_num_workers[1000], s_year[6], s_min_price[6];
-    int print_flag = 0;
+    char s_print_flag = '0', s_num_workers[1000], s_year[6], s_min_price[10];
     int help_flag = 0;
     int num_workers = 0;
     int opt, year = -1;
@@ -79,7 +79,6 @@ int main(int argc, char *argv[])
             break;
         case 'b': // flag para imprimir los datos por pantalla
             s_print_flag = '1';
-            print_flag = 1;
             break;
         case 'h':
             usage(stdout, argv[0]);
@@ -113,7 +112,7 @@ int main(int argc, char *argv[])
     }
 
     if(fork() == 0){
-        execl("./broker", "./broker", input_file, output_file, s_year, s_min_price, s_num_workers, s_print_flag, NULL);
+        execl("./broker", "./broker", input_file, output_file, s_year, s_min_price, s_num_workers, &s_print_flag, NULL);
         perror("Exec ls failed");
         exit(EXIT_FAILURE);
     }
