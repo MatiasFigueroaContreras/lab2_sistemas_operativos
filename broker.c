@@ -26,8 +26,17 @@ int main(int argc, char *argv[])
     }
 
     printf("1\n");
-    YearData *years_data = createYearsDataArray(initial_year);
+    int max_years = 2022 - initial_year + 1;
+    int game_year;
+    YearData *years_data = malloc(sizeof(YearData) * max_years);
+    unsigned long cap = sizeof(YearData) * max_years;
+    printf("Cap: %lu\n", cap);
+    years_data = createYearsDataArray(initial_year);
     printf("2\n");
+    for(int i = 0; i < max_years;  i++)
+    {
+        printf("%s", toString(&years_data[i]));
+    }
     srand(time(NULL));
     printf("3\n");
     FILE *read_file = fopen(input_file, "r");
@@ -36,15 +45,17 @@ int main(int argc, char *argv[])
         printf("while 1\n");
         printf("Game data: %s", game_data);
         random_worker = rand() % num_workers;
+        game_year = getYear(game_data);
         printf("Random worker: %d\n", random_worker);
         printf("while 2\n");
         write(fds[random_worker][BROKER_WRITE][WRITING], game_data, sizeof(char) * 400);
         printf("while 3\n");
-        write(fds[random_worker][BROKER_WRITE][WRITING], years_data, sizeof(YearData) * (2022 - initial_year + 1));
+        write(fds[random_worker][BROKER_WRITE][WRITING], &years_data[game_year], sizeof(YearData));
         printf("while 4\n");
         //Se espera respuesta del worker
-        read(fds[random_worker][BROKER_READ][READING], years_data, sizeof(YearData) * (2022 - initial_year + 1));
+        read(fds[random_worker][BROKER_READ][READING], &years_data[game_year], sizeof(YearData));
         printf("while 5\n");
+        printf("%s\n", toString(&years_data[game_year]));
     }
     printf("4\n");
     num_lines_workers = stopWorkers(fds, num_workers);

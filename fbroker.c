@@ -59,10 +59,14 @@ YearData *createYearsDataArray(int initial_year)
 {
     
     int num_years = 2022 - initial_year + 1;
+    int index;
     YearData *years_data = malloc(sizeof(YearData) * num_years);
-    for(int i = 0; i < num_years; i++)
+    for (int y = initial_year; y <= 2022; y++)
     {
-        years_data[i] = *createYearData();
+        index = y % num_years;
+        years_data[index] = *createYearData();
+        years_data[index].year = y;
+        years_data[index].price_cheap_game = 1000000;
     }
 
     return years_data;
@@ -101,10 +105,11 @@ int *stopWorkers(int ***fds, int num_workers)
 void writeOutputFile(char *file_name, YearData *years_data, int initial_year)
 {
     int index;
+    int num_years = 2022 - initial_year + 1;
     FILE *file = fopen(file_name, "w");
     for (int y = initial_year; y <= 2022; y++)
     {
-        index = y % 2022;
+        index = y % num_years;
         if (!isEmpty(&years_data[index]))
         {
             fputs(toString(&years_data[index]), file);
@@ -120,9 +125,10 @@ void writeOutputFile(char *file_name, YearData *years_data, int initial_year)
 void printYearsData(YearData *years_data, int initial_year)
 {
     int index;
+    int num_years = 2022 - initial_year + 1;
     for (int y = initial_year; y <= 2022; y++)
     {
-        index = y % 2022;
+        index = y % num_years;
         if (!isEmpty(&years_data[index]))
         {
             printf("%s", toString(&years_data[index]));
@@ -141,4 +147,19 @@ void printLineNumbersWorkers(int *line_numbers, int num_workers)
     {
         printf("Hijo %d: %d lineas procesadas", i + 1, line_numbers[i]);
     }
+}
+
+int getYear(char *game_data)
+{
+    char game_data_copy[400];
+    strcpy(game_data_copy, game_data);
+    int year;
+    char *value = strtok(game_data_copy, ",");
+    for (int column = 0; column < 6; column++)
+    {
+        value = strtok(NULL, ",");
+    }
+
+    year = atoi(value);
+    return year;
 }

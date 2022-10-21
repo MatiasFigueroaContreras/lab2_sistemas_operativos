@@ -17,7 +17,7 @@ typedef struct
     int mac_games;
     int linux_games;
     int num_free_games;
-    char free_games[100][100];
+    char free_games[50][100];
 } YearData;
 
 YearData *createYearData();

@@ -17,3 +17,5 @@ void writeOutputFile(char *output_file, YearData *years_data, int initial_year);
 void printYearsData(YearData *years_data, int initial_year);
 
 void printLineNumbersWorkers(int *line_numbers, int num_workers);
+
+int getYear(char *game_data);

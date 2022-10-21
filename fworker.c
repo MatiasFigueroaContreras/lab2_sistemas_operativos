@@ -11,14 +11,16 @@
     Descripcion: Funcion encargada de actualizar la informacion de YearData
         dada un string (line) con informacion referente a un juego.
 */
-YearData *updateYearData(char *line, YearData *years_data, float min_price, int initial_year)
+void updateYearData(char *line, YearData *years_data, float min_price, int initial_year)
 {
+    printf("U1\n");
     int index, year, in_windows = 0, in_mac = 0, in_linux = 0, is_free = 0, max_years = 2022 - initial_year + 1;
     float price;
     char game_name[100];
     
     int column = 0;
     char *value = strtok(line, ",");
+    printf("U2\n");
     while (value)
     {
         switch (column)
@@ -60,47 +62,49 @@ YearData *updateYearData(char *line, YearData *years_data, float min_price, int 
             break;
         }
 
+        printf("Column: %d\n", column);
         value = strtok(NULL, ",");
         column++;
     }
-
+    printf("U3\n");
     if (initial_year <= year && min_price <= price)
     {
-        index = year % max_years;
-        years_data[index].total_games++;
-        years_data[index].sum_prices += price;
+        printf("IF -> U4\n");
+        years_data->total_games++;
+        years_data->sum_prices += price;
         if(is_free)
         {
-            strcpy(years_data[index].free_games[years_data[index].num_free_games], game_name);
-            years_data[index].num_free_games++;
+            strcpy(years_data->free_games[years_data[index].num_free_games], game_name);
+            years_data->num_free_games++;
         }
 
         if(in_windows)
         {
-            years_data[index].windows_games++;
+            years_data->windows_games++;
         }
 
         if (in_mac)
         {
-            years_data[index].mac_games++;
+            years_data->mac_games++;
         }
 
         if (in_linux)
         {
-            years_data[index].linux_games++;
+            years_data->linux_games++;
         }
 
-        if (price > years_data[index].price_expensive_game)
+        if (price > years_data->price_expensive_game)
         {
-            years_data[index].price_expensive_game = price;
-            strcpy(years_data[index].expensive_game, game_name);
+            years_data->price_expensive_game = price;
+            strcpy(years_data->expensive_game, game_name);
         }
-        if (price < years_data[index].price_cheap_game)
+        if (price < years_data->price_cheap_game)
         {
-            years_data[index].price_cheap_game = price;
-            strcpy(years_data[index].cheap_game, game_name);
+            years_data->price_cheap_game = price;
+            strcpy(years_data->cheap_game, game_name);
         }
+        printf("if -> U4.2\n");
+        printf("Year Data actualizado:\n%s\n", toString(years_data));
     }
-
-    return years_data;
+    printf("U5\n");
 }

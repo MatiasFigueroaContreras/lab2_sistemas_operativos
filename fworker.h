@@ -5,4 +5,4 @@
 #define READING 0
 #define WRITING 1
 
-YearData *updateYearData(char *line, YearData *years_data, float min_price, int initial_year);
+void updateYearData(char *line, YearData *years_data, float min_price, int initial_year);
