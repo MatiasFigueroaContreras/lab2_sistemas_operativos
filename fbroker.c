@@ -44,7 +44,7 @@ int ***createWorkers(int num_workers, float min_price, int initial_year)
             close(fds[i][BROKER_READ][WRITING]);
         }
     }
-
+    
     return fds;
 }
 
@@ -145,7 +145,7 @@ void printLineNumbersWorkers(int *line_numbers, int num_workers)
 {
     for (int i = 0; i < num_workers; i++)
     {
-        printf("Hijo %d: %d lineas procesadas", i + 1, line_numbers[i]);
+        printf("Hijo %d: %d lineas procesadas\n", i + 1, line_numbers[i]);
     }
 }
 
@@ -155,7 +155,7 @@ int getYear(char *game_data)
     strcpy(game_data_copy, game_data);
     int year;
     char *value = strtok(game_data_copy, ",");
-    for (int column = 0; column < 6; column++)
+    for (int column = 0; column < 5; column++)
     {
         value = strtok(NULL, ",");
     }

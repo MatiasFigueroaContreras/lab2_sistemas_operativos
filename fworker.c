@@ -13,14 +13,12 @@
 */
 void updateYearData(char *line, YearData *years_data, float min_price, int initial_year)
 {
-    printf("U1\n");
-    int index, year, in_windows = 0, in_mac = 0, in_linux = 0, is_free = 0, max_years = 2022 - initial_year + 1;
+    int year, in_windows = 0, in_mac = 0, in_linux = 0, is_free = 0;
     float price;
     char game_name[100];
     
     int column = 0;
     char *value = strtok(line, ",");
-    printf("U2\n");
     while (value)
     {
         switch (column)
@@ -62,19 +60,16 @@ void updateYearData(char *line, YearData *years_data, float min_price, int initi
             break;
         }
 
-        printf("Column: %d\n", column);
         value = strtok(NULL, ",");
         column++;
     }
-    printf("U3\n");
     if (initial_year <= year && min_price <= price)
     {
-        printf("IF -> U4\n");
         years_data->total_games++;
         years_data->sum_prices += price;
         if(is_free)
         {
-            strcpy(years_data->free_games[years_data[index].num_free_games], game_name);
+            strcpy(years_data->free_games[years_data->num_free_games], game_name);
             years_data->num_free_games++;
         }
 
@@ -103,8 +98,5 @@ void updateYearData(char *line, YearData *years_data, float min_price, int initi
             years_data->price_cheap_game = price;
             strcpy(years_data->cheap_game, game_name);
         }
-        printf("if -> U4.2\n");
-        printf("Year Data actualizado:\n%s\n", toString(years_data));
     }
-    printf("U5\n");
 }
