@@ -2,12 +2,11 @@
 
 int main(int argc, char *argv[])
 {
-    int fd_read, fd_write, initial_year;
+    int fd_read, initial_year;
     float min_price;
     fd_read = atoi(argv[1]);
-    fd_write = atoi(argv[2]);
-    min_price = atoi(argv[3]);
-    initial_year = atof(argv[4]);
+    min_price = atoi(argv[2]);
+    initial_year = atof(argv[3]);
     int lines = 0;
     char msg[400];
     YearData years_data;
@@ -17,13 +16,12 @@ int main(int argc, char *argv[])
         read(fd_read, &years_data, sizeof(YearData));
         //Se envia la respuesta al broker
         updateYearData(msg, &years_data, min_price, initial_year);
-        write(fd_write, &years_data, sizeof(YearData));
+        write(STDOUT_FILENO, &years_data, sizeof(YearData));
         lines++;
     }
-    write(fd_write, &lines, sizeof(int));
+    write(STDOUT_FILENO, &lines, sizeof(int));
 
     close(fd_read);
-    close(fd_write);
 
     return 0;
 }

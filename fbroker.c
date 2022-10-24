@@ -24,13 +24,14 @@ int ***createWorkers(int num_workers, float min_price, int initial_year)
         pipe(fds[i][BROKER_READ]);
         if ((pid = fork()) == 0)
         {
+            dup2(fds[i][BROKER_READ][WRITING], STDOUT_FILENO);
             close(fds[i][BROKER_WRITE][WRITING]);
             close(fds[i][BROKER_READ][READING]);
             sprintf(fd_read, "%d", fds[i][0][READING]);
             sprintf(fd_write, "%d", fds[i][1][WRITING]);
             sprintf(s_min_price, "%f", min_price);
             sprintf(s_initial_year, "%d", initial_year);
-            execl("./worker", "./worker", fd_read, fd_write, s_min_price, s_initial_year, NULL);
+            execl("./worker", "./worker", fd_read, s_min_price, s_initial_year, NULL);
             perror("exec ls failed");
             exit(EXIT_FAILURE);
         }
