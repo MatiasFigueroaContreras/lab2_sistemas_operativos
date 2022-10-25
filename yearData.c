@@ -1,12 +1,13 @@
 #include "yearData.h"
 
 /*
-    Descripcion: Crea una estructura YearData, con la informacion inicial
+    Entradas:
+        -void
+    Salidas:
+        -YearData: Estructura YearData inicializada
+    Descripcion: 
+        -Crea una estructura YearData, con la informacion inicial
         establecida.
-    Parametros:
-        No tiene.
-    Retorno:
-        Puntero a la estructura YearData creada.
 */
 YearData *createYearData()
 {
@@ -21,11 +22,11 @@ YearData *createYearData()
 }
 
 /*
-    Descripcion: Transforma los datos del año seleccionado en un string
-    Parametros:
-        YearData: Estructura con los datos del año seleccionado
-    Retorno:
-        char*: String con los datos del año seleccionado
+    Entradas:
+        -YearData *info: Estructura YearData
+    Salidas:
+        -char String: String con la informacion de la estructura
+    Descripcion: Transforma los datos del año seleccionado en un string    
 */
 char *toString(YearData *info)
 {
@@ -86,12 +87,12 @@ char *toString(YearData *info)
 }
 
 /*
-    Descripcion: Calcula el promedio de precios de los juegos del año seleccionado
-
-    Parametros:
-        YearData: Estructura con los datos del año seleccionado
+    Entradas::
+        -YearData *info : Estructura con los datos del año seleccionado
     Retorno:
-        float: Promedio de precios de los juegos del año seleccionado
+        float mean: Promedio de precios de los juegos del año seleccionado
+    Descripcion:
+        -Calcula el promedio de precios de los juegos del año seleccionado
 */
 float meanPrices(YearData *info)
 {
@@ -102,13 +103,13 @@ float meanPrices(YearData *info)
 }
 
 /*
-    Descripcion: Calcula el porcentaje de juegos de una plataforma en especifico
-
-    Parametros:
-        int total_games: Total de juegos del año seleccionado
-        int plataform_games: Total de juegos de una plataforma en especifico
-    Retorno:
-        float: Porcentaje de juegos de una plataforma en especifico
+    Entradas:
+        -int total_games: Total de juegos del año seleccionado
+        -int plataform_games: Total de juegos de una plataforma en especifico
+    Salidas:
+        -float: Porcentaje de juegos de una plataforma en especifico
+    Descripcion: 
+        -Calcula el porcentaje de juegos de una plataforma en especifico
 */
 float getPercentage(int total_games, int plataform_games)
 {
@@ -116,13 +117,13 @@ float getPercentage(int total_games, int plataform_games)
 }
 
 /*
-    Descripcion: Consulta si la estructura esta vacia.
-
-    Parametros:
+    Entradas:
         YearData: Estructura con los datos del año seleccionado
-    Retorno:
+    Salidas:
         0: si la estructura NO esta vacia.
         1: si la estructura esta vacia.
+    Descripcion: 
+        -Consulta si la estructura esta vacia.
 */
 int isEmpty(YearData *data)
 {

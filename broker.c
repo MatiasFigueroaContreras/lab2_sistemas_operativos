@@ -17,21 +17,13 @@ int main(int argc, char *argv[])
     char game_data[400]; 
     int random_worker, *num_lines_workers;
     int ***fds = createWorkers(num_workers, min_price, initial_year);
-    // for(int i = 0; i < num_workers; i++)
-    // {
-    //     printf("Worker n°%d\n", i + 1);
-    //     printf("Escritura Broker Fd[0]: %d, Fd[1]: %d\n", fds[i][0][0], fds[i][0][1]);
-    //     printf("Lectura Broker Fd[0]: %d, Fd[1]: %d\n", fds[i][1][0], fds[i][1][1]);
-    // }
+    
 
     int game_year, game_index;
     int max_years = 2022 - initial_year + 1;
     YearData *years_data = malloc(sizeof(YearData) * max_years);
     years_data = createYearsDataArray(initial_year);
-    // for(int i = 0; i < max_years;  i++)
-    // {
-    //     printf("%s", toString(&years_data[i]));
-    // }
+ 
     srand(time(NULL));
     FILE *read_file = fopen(input_file, "r");
     while (fgets(game_data, 400, read_file))

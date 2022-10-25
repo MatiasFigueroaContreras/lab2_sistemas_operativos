@@ -2,8 +2,13 @@
 
 /*
     Entradas:
+        - int num_workers: Cantidad de workers a crear
+        - float min_price: Precio minimo de los juegos
+        - int initial_year: Anio inicial de los juegos
     Salidas:
+        - int ***fds: Arreglo de pipes para comunicacion entre broker y workers
     Descripcion:
+        - Crea los workers y los conecta con el broker mediante pipes
 */
 int ***createWorkers(int num_workers, float min_price, int initial_year)
 {
@@ -51,10 +56,12 @@ int ***createWorkers(int num_workers, float min_price, int initial_year)
 
 /*
     Entradas:
-        -int initial_year: anio inicial para comenzar buscar informacion. 
-    Salidas: arreglo con las estructuras YearData creadas.
-    Descripcion: Esta funcion se encarga de crear un arreglo de estructuras
-        YearData segun el anio inicial dado hasta el anio actual.
+        - int initial_year: Anio inicial para comenzar buscar informacion. 
+    Salidas: 
+        - YearData years_data: Arreglo con las estructuras YearData creadas.
+    Descripcion: 
+        - Funcion encargada de crear un arreglo de estructuras
+        YearData segun el anio inicial dado hasta el anio actua.
 */
 YearData *createYearsDataArray(int initial_year)
 {
@@ -75,10 +82,12 @@ YearData *createYearsDataArray(int initial_year)
 
 /*
     Entradas:
-        -int ** fds: descriptores de archivos.
-        -int num_workers: numero de workers creados.
-    Salidas: cantidad de lineas trabajadas por los workers
-    Descripcion: Funcion encargada de mandar mensaje "FIN" a cada worker
+        - int *** fds: descriptores de archivos.
+        - int num_workers: numero de workers creados.
+    Salidas:
+        - int line_numbers: cantidad de lineas trabajadas por los workers
+    Descripcion: 
+        -Funcion encargada de mandar mensaje "FIN" a cada worker
         y recibir la cantidad de lineas trabajadas por estos.
 */
 int *stopWorkers(int ***fds, int num_workers)
@@ -98,10 +107,13 @@ int *stopWorkers(int ***fds, int num_workers)
 
 /*
     Entradas:
-        -char *file_name: nombre del archivo de salida.
-        -YearData *years_data: arreglo con los Years Data.
-    Salidas: void
-    Descripcion: Funcion destinada a escribir en un archivo de salida
+        -char *file_name: Nombre del archivo de salida.
+        -YearData *years_data: Arreglo con los Years Data.
+        -int initial_year: anio inicial de los datos.
+    Salidas: 
+        -void
+    Descripcion: 
+        -Funcion destinada a escribir en un archivo de salida
 */
 void writeOutputFile(char *file_name, YearData *years_data, int initial_year)
 {
@@ -119,9 +131,12 @@ void writeOutputFile(char *file_name, YearData *years_data, int initial_year)
 }
 
 /*
-    Entradas:YearData *years_data (ESTRUCTURA YEAR DATA)
-    Salidas: void
-    Descripcion: Imprime la estructura para la consola
+    Entradas:
+        - YearData *years_data: Estructura YearData
+    Salidas: 
+        - void
+    Descripcion: 
+        - Imprime la estructura para la consola
 */
 void printYearsData(YearData *years_data, int initial_year)
 {
@@ -138,9 +153,12 @@ void printYearsData(YearData *years_data, int initial_year)
 }
 
 /*
-    Entradas: int *line_numbers (NUMERO DE LINEAS DE CADA WORKER)
-    Salidas: void
-    Descripcion: Imprime la cantidad de lineas de cada worker para la consola en caso de que se active la flag -b
+    Entradas: 
+        -int *line_numbers: Numero de lineas de cada worker 
+    Salidas: 
+        -void
+    Descripcion: 
+        -Imprime la cantidad de lineas de cada worker para la consola en caso de que se active la flag -b
 */
 void printLineNumbersWorkers(int *line_numbers, int num_workers)
 {
@@ -150,6 +168,14 @@ void printLineNumbersWorkers(int *line_numbers, int num_workers)
     }
 }
 
+/*
+    Entradas:
+        - char *game_data: linea de datos de un juego.
+    Salidas:
+        - int year: anio del juego.
+    Descripcion:
+        - Funcion encargada de obtener el anio de un juego.
+*/
 int getYear(char *game_data)
 {
     char game_data_copy[400];

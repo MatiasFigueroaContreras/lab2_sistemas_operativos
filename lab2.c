@@ -7,13 +7,15 @@
 #include <sys/wait.h>
 
 /*
-    Descripcion: Imprime la informacion de uso referente al formato
+    Entradas:
+        - FILE *fp: Salida por consola
+        - const char *path: Ruta del archivo
+    Salidas: 
+        - void
+    Descripcion: 
+        -Imprime la informacion de uso referente al formato
         correcto para la ejecucion del programa.
-    Parametros:
-        -fp: salida por consola.
-        -path: direccion donde se encuentra el nombre del programa.
-    Retorno:
-        no tiene.
+
 */
 void usage(FILE *fp, const char *path)
 {
