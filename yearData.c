@@ -2,7 +2,7 @@
 
 /*
     Entradas:
-        -void
+        -No posee.
     Salidas:
         -YearData: Estructura YearData inicializada
     Descripcion: 
@@ -30,7 +30,6 @@ YearData *createYearData()
 */
 char *toString(YearData *info)
 {
-    // asignacion de memoria
     char *string = malloc(sizeof(char)*1000); 
     char year[50], price_expensive_game[150], price_cheap_game[150], total_games[50], mean[50], total_windows[50], total_mac[50], total_linux[50];
 

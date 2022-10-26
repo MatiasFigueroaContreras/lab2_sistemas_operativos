@@ -2,23 +2,24 @@
 
 /*
     Entradas:
-        -char *line: Cantidad de lineas  de la informacion del juego
-        -YearData *years_data: Arreglo de yearData
-        -float min_price: Precio minimo a considerar
+        -char *game_data: informacion referente al juego.
+        -YearData *years_data: puntero a estructura year data con la informacion referente 
+            al anio del juego a trabajar y actualizar.
+        -float min_price: Precio minimo a considerar.
         -int initial_year: Anio a partir del cual se parte como base hasta el anio actual
     Salidas:
-        -YearData: arreglo con YearData, actualizado
-    Descripcion: Funcion encargada de actualizar la informacion de YearData
-        dada un string (line) con informacion referente a un juego.
+        -void
+    Descripcion: Funcion encargada de actualizar la informacion de un YearData
+        dada un string (game_data) con informacion referente a un juego.
 */
-void updateYearData(char *line, YearData *years_data, float min_price, int initial_year)
+void updateYearData(char *game_data, YearData *years_data, float min_price, int initial_year)
 {
     int year, in_windows = 0, in_mac = 0, in_linux = 0, is_free = 0;
     float price;
     char game_name[100];
     
     int column = 0;
-    char *value = strtok(line, ",");
+    char *value = strtok(game_data, ",");
     while (value)
     {
         switch (column)

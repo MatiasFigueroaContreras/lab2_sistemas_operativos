@@ -34,14 +34,15 @@ void usage(FILE *fp, const char *path)
     fprintf(fp, "  -p, --min[=MINPRICE]\t"
                 "Minimum price required to start the search.\n");
     fprintf(fp, "  -n, --workers[=NUMWORKERS]\t"
-                ".\n");
+                "Number of workers to create.\n");
     fprintf(fp, "  -b, --print[=PRINTFLAG]\t"
                 "print the data in the console.\n");
 }
 
 int main(int argc, char *argv[])
 {
-    char s_print_flag = '0', s_num_workers[1000], s_year[6], s_min_price[10];
+    char s_num_workers[1000], s_year[6], s_min_price[10];
+    char s_print_flag = '0';
     int help_flag = 0;
     int num_workers = 0;
     int opt, year = -1;
@@ -87,10 +88,10 @@ int main(int argc, char *argv[])
             return 0;
         case '?': // flag que no existe
             usage(stderr, argv[0]);
-            return 1;
+            exit(EXIT_FAILURE);
         case ':': // cuando se usa mal una flag
             usage(stderr, argv[0]);
-            return 1;
+            exit(EXIT_FAILURE);
         default: // se aborta cuando falta flag o argumento obligatorio
             abort();
             break;
@@ -103,7 +104,7 @@ int main(int argc, char *argv[])
         //   el funcionamiento del programa, ademas si se ingresa
         //   la flag de ayuda.
         usage(stderr, argv[0]);
-        return 1;
+        exit(EXIT_FAILURE);
     }
 
     if(access(input_file, 0) != 0)
@@ -120,7 +121,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        wait(NULL); //?
+        wait(NULL); // Se espera a que el broker termine
         return 0;
     }
 }

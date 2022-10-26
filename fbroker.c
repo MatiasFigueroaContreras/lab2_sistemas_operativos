@@ -2,22 +2,24 @@
 
 /*
     Entradas:
-        - int num_workers: Cantidad de workers a crear
-        - float min_price: Precio minimo de los juegos
-        - int initial_year: Anio inicial de los juegos
+        - int num_workers: Cantidad de workers a crear.
+        - float min_price: Precio minimo de los juegos.
+        - int initial_year: Anio inicial de los juegos.
     Salidas:
-        - int ***fds: Arreglo de pipes para comunicacion entre broker y workers
+        - int ***fds: Arreglo de descriptores de archivos generados
+            con pipe para comunicacion entre broker y workers.
     Descripcion:
-        - Crea los workers y los conecta con el broker mediante pipes
+        - Crea los procesos workers y los conecta con el broker mediante pipes,
+            pasandole toda la informacion preliminar que necesitaran los workers.
 */
 int ***createWorkers(int num_workers, float min_price, int initial_year)
 {
     int pid;
     int ***fds = malloc(sizeof(int **) * num_workers);
-    for(int i = 0; i < num_workers; i++)
+    for (int i = 0; i < num_workers; i++)
     {
         fds[i] = malloc(sizeof(int *) * 2);
-        for(int j = 0; j < 2; j++)
+        for (int j = 0; j < 2; j++)
         {
             fds[i][j] = malloc(sizeof(int) * 2);
         }
@@ -50,22 +52,23 @@ int ***createWorkers(int num_workers, float min_price, int initial_year)
             close(fds[i][BROKER_READ][WRITING]);
         }
     }
-    
+
     return fds;
 }
 
 /*
     Entradas:
-        - int initial_year: Anio inicial para comenzar buscar informacion. 
-    Salidas: 
-        - YearData years_data: Arreglo con las estructuras YearData creadas.
-    Descripcion: 
+        - int initial_year: Anio inicial para comenzar a buscar informacion.
+    Salidas:
+        - YearData *years_data: Arreglo con las estructuras YearData creadas
+            e inicializadas.
+    Descripcion:
         - Funcion encargada de crear un arreglo de estructuras
-        YearData segun el anio inicial dado hasta el anio actua.
+            YearData segun el anio inicial dado hasta el anio actual.
 */
 YearData *createYearsDataArray(int initial_year)
 {
-    
+
     int num_years = 2022 - initial_year + 1;
     int index;
     YearData *years_data = malloc(sizeof(YearData) * num_years);
@@ -85,15 +88,15 @@ YearData *createYearsDataArray(int initial_year)
         - int *** fds: descriptores de archivos.
         - int num_workers: numero de workers creados.
     Salidas:
-        - int line_numbers: cantidad de lineas trabajadas por los workers
-    Descripcion: 
+        - int *line_numbers: cantidad de lineas trabajadas por los workers.
+    Descripcion:
         -Funcion encargada de mandar mensaje "FIN" a cada worker
-        y recibir la cantidad de lineas trabajadas por estos.
+            y recibir la cantidad de lineas trabajadas por estos.
 */
 int *stopWorkers(int ***fds, int num_workers)
 {
     const char *msg = "FIN";
-    int *line_numbers = malloc(sizeof(int) * num_workers) ;
+    int *line_numbers = malloc(sizeof(int) * num_workers);
     for (int i = 0; i < num_workers; i++)
     {
         write(fds[i][BROKER_WRITE][WRITING], msg, strlen(msg) + 1);
@@ -108,12 +111,14 @@ int *stopWorkers(int ***fds, int num_workers)
 /*
     Entradas:
         -char *file_name: Nombre del archivo de salida.
-        -YearData *years_data: Arreglo con los Years Data.
+        -YearData *years_data: Arreglo con la informacion referente
+            a cada anio.
         -int initial_year: anio inicial de los datos.
-    Salidas: 
+    Salidas:
         -void
-    Descripcion: 
-        -Funcion destinada a escribir en un archivo de salida
+    Descripcion:
+        -Funcion destinada a escribir en un archivo de salida la
+            informacion referente a cada anio.
 */
 void writeOutputFile(char *file_name, YearData *years_data, int initial_year)
 {
@@ -132,11 +137,12 @@ void writeOutputFile(char *file_name, YearData *years_data, int initial_year)
 
 /*
     Entradas:
-        - YearData *years_data: Estructura YearData
-    Salidas: 
+        - YearData *years_data: Arreglo con la informacion referente
+            a cada anio.
+    Salidas:
         - void
-    Descripcion: 
-        - Imprime la estructura para la consola
+    Descripcion:
+        - Imprime por consola la informacion referente a cada anio.
 */
 void printYearsData(YearData *years_data, int initial_year)
 {
@@ -153,12 +159,13 @@ void printYearsData(YearData *years_data, int initial_year)
 }
 
 /*
-    Entradas: 
-        -int *line_numbers: Numero de lineas de cada worker 
-    Salidas: 
+    Entradas:
+        -int *line_numbers: Numero de lineas de cada worker.
+        -int num_workers: numero de workers generados.
+    Salidas:
         -void
-    Descripcion: 
-        -Imprime la cantidad de lineas de cada worker para la consola en caso de que se active la flag -b
+    Descripcion:
+        -Imprime la cantidad de lineas de cada worker por consola.
 */
 void printLineNumbersWorkers(int *line_numbers, int num_workers)
 {

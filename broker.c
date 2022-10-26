@@ -17,7 +17,6 @@ int main(int argc, char *argv[])
     char game_data[400]; 
     int random_worker, *num_lines_workers;
     int ***fds = createWorkers(num_workers, min_price, initial_year);
-    
 
     int game_year, game_index;
     int max_years = 2022 - initial_year + 1;
@@ -31,9 +30,10 @@ int main(int argc, char *argv[])
         random_worker = rand() % num_workers;
         game_year = getYear(game_data);
         game_index = game_year % max_years;
+        // Se envia informacion por el pipe hacia el random worker
         write(fds[random_worker][BROKER_WRITE][WRITING], game_data, sizeof(char) * 400);
         write(fds[random_worker][BROKER_WRITE][WRITING], &years_data[game_index], sizeof(YearData));
-        //Se espera respuesta del worker
+        // Se espera respuesta del worker
         read(fds[random_worker][BROKER_READ][READING], &years_data[game_index], sizeof(YearData));
     }
     num_lines_workers = stopWorkers(fds, num_workers);
@@ -43,5 +43,6 @@ int main(int argc, char *argv[])
         printYearsData(years_data, initial_year);
         printLineNumbersWorkers(num_lines_workers, num_workers);
     }
+    
     return 0;
 }
